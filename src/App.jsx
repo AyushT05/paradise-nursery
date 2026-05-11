@@ -1,13 +1,31 @@
+import React, { useState } from "react";
 import "./App.css";
 
-function App() {
-  return (
-    <div className="landing-page">
-      <h1>Paradise Nursery</h1>
+import ProductList from "./components/ProductList";
+import AboutUs from "./components/AboutUs";
 
-      <button>
-        Get Started
-      </button>
+function App() {
+  const [showProductList, setShowProductList] = useState(false);
+
+  const handleGetStarted = () => {
+    setShowProductList(true);
+  };
+
+  return (
+    <div>
+      {!showProductList ? (
+        <div className="landing-page">
+          <h1>Welcome to Paradise Nursery</h1>
+
+          <AboutUs />
+
+          <button onClick={handleGetStarted}>
+            Get Started
+          </button>
+        </div>
+      ) : (
+        <ProductList />
+      )}
     </div>
   );
 }

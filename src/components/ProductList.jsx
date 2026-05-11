@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../redux/CartSlice";
 import { Link } from "react-router-dom";
@@ -57,21 +57,20 @@ const plants = [
 function ProductList() {
   const dispatch = useDispatch();
 
+  const cartItems = useSelector(
+    (state) => state.cart.cartItems
+  );
+
   const totalQuantity = useSelector(
     (state) => state.cart.totalQuantity
   );
 
-  const [addedItems, setAddedItems] = useState([]);
-
   const handleAddToCart = (plant) => {
-    dispatch(
-      addItem({
-        ...plant,
-        quantity: 1,
-      })
-    );
+    dispatch(addItem(plant));
+  };
 
-    setAddedItems([...addedItems, plant.id]);
+  const isAddedToCart = (id) => {
+    return cartItems.some((item) => item.id === id);
   };
 
   const categories = [
@@ -109,7 +108,6 @@ function ProductList() {
         </div>
       </nav>
 
-      {/* Product Categories */}
       <div style={{ padding: "20px" }}>
         {categories.map((category) => (
           <div key={category}>
@@ -142,7 +140,6 @@ function ProductList() {
                         width: "100%",
                         height: "200px",
                         objectFit: "cover",
-                        borderRadius: "10px",
                       }}
                     />
 
@@ -152,21 +149,10 @@ function ProductList() {
 
                     <button
                       onClick={() => handleAddToCart(plant)}
-                      disabled={addedItems.includes(plant.id)}
-                      style={{
-                        padding: "10px",
-                        backgroundColor: addedItems.includes(plant.id)
-                          ? "gray"
-                          : "green",
-                        color: "white",
-                        border: "none",
-                        cursor: "pointer",
-                        width: "100%",
-                        borderRadius: "5px",
-                      }}
+                      disabled={isAddedToCart(plant.id)}
                     >
-                      {addedItems.includes(plant.id)
-                        ? "Added"
+                      {isAddedToCart(plant.id)
+                        ? "Added to Cart"
                         : "Add to Cart"}
                     </button>
                   </div>
